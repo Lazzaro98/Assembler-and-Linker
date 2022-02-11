@@ -51,6 +51,8 @@ private:
 	void processJumpAbsolute2(std::string line); // <simbol> - vrednost <simbol> apsolutnim adresiranjem
 	void processJumpMemDirSymbol2(std::string line); // *<literal> - vrednost iz memorije na adresi <literal>
 	void processJumpMemDirLiteral2(std::string line); // *<literal> - vrednost iz memorije na adresi <literal>
+	void processJumpDisplLiteral2(std::string line);
+	void processJumpDisplSymbol2(std::string line);
 	//final process jump
 	void processJump2(std::string line);
 
@@ -62,6 +64,8 @@ private:
 	void processLdstrMemdirAbsolute(std::string line); // <simbol> - vrednost iz memorije na adresi <simbol> apsolutnim adresiranjem
 	void processLdstrMemdirLiteral(std::string line);// <literal> - vrednost iz memorije na adresi <literal>
 	void processLdstrPC2(std::string line);// %<simbol> - vrednost iz memorije na adresi <simbol> PC relativnim adresiranjem
+	void processLdstrDisplLiteral2(std::string line);
+	void processLdstrDisplSymbol2(std::string line);
 	//final process ldr str
 	void processLdstr2(std::string line);
 

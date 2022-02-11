@@ -11,10 +11,10 @@ class Linker
 	void load_sections();
 	void load_globals();
 	void check_externs();
+	void load_reloc();
 	void resolve_start_addresses();
 	bool is_overlap(std::string sectionName);
 	void merge_code();
-
 	int ids = 2;
 
 	std::string mode = "";

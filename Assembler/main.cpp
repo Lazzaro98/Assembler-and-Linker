@@ -14,7 +14,7 @@ void load_program_arguments(int argc, char** argv, std::string* input_file_name,
 		}
 	}
 }
-
+/*
 int main(int argc, char** argv)
 {
     try {
@@ -26,6 +26,8 @@ int main(int argc, char** argv)
 		linker->receive_from_assembler();
 		linker->link();
 		linker->output();
+		linker->print_relocation_table();
+		linker->print_symbol_table();
     }
     catch (std::string msg) {
         std::cout << "ERROR: ";
@@ -33,16 +35,16 @@ int main(int argc, char** argv)
     }
 }
 
+*/
 
-/*
 
 int main(int argc, char** argv)
 {
 	try {
 
 		std::string output_file_name = "output.o"; // default values
-		std::string input_file_name = "test.s";
-		load_program_arguments(argc, argv, &input_file_name, &output_file_name); // load if there are program arguments
+		std::string input_file_name = "test2.txt";
+		//load_program_arguments(argc, argv, &input_file_name, &output_file_name); // load if there are program arguments
 		Assembler* assembler = new Assembler(input_file_name, output_file_name);
 		assembler->first_pass();
 		assembler->second_pass();
@@ -59,4 +61,3 @@ int main(int argc, char** argv)
 }
 
 
-*/

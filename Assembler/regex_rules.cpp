@@ -31,7 +31,8 @@ std::string regex_rules::regex_instruction_jmp_pc = "^[ \\t]*(jmp|call|jeq|jne|j
 std::string regex_rules::regex_instruction_jmp_absolute = "^[ \\t]*(jmp|call|jeq|jne|jgt)[ \\t]*([a-zA-Z][0-9a-zA-Z]*)[ \\t]*$";
 std::string regex_rules::regex_instruction_jmp_memdir_symbol = "^[ \\t]*(jmp|call|jeq|jne|jgt)[ \\t]*[*]([a-zA-Z][0-9a-zA-Z]*)[ \\t]*$";
 std::string regex_rules::regex_instruction_jmp_memdir_literal = "^[ \\t]*(jmp|call|jeq|jne|jgt)[ \\t]*[*]0{0,1}[xX]{0,1}([1-9][0-9a-fA-F]{0,3})[ \\t]*$";
-
+std::string regex_rules::regex_instruction_jmp_displ_literal = "[ \\t]*(jmp|call|jeq|jne|jgt)[ \\t]* [ \\t]*[*]\\[(r[0-8])[ \\t]*[+][ \\t]*0{0,1}[xX]{0,1}([1-9][0-9a-fA-F]{0,3})\\]$"; //group1->instr, group2->registar, group3->brojna vrednost bez 0x
+std::string regex_rules::regex_instruction_jmp_displ_symbol = "^[ \\t]*(jmp|call|jeq|jne|jgt)[ \\t]*[ \\t]*[*]\\[(r[0-8])[ \\t]*[+][ \\t]*([a-zA-Z_][a-zA-Z_]*)\\]$";// group1 -> jump, group2->registar, group3->simbol
 //ldr/str
 std::string regex_rules::regex_instruction_ldstr_direct_literal = "^[ \\t]*(ldr|str)[ \\t](r[0-7]|psw|pc|sp)[,][ \\t]*[$]0{0,1}[xX]{0,1}([1-9][0-9a-fA-F]{0,3})[ \\t]*$";
 std::string regex_rules::regex_instruction_ldstr_direct_symbol = "^[ \\t]*(ldr|str)[ \\t](r[0-7]|psw|pc|sp)[,][ \\t]*[$]([a-zA-Z][a-zA-Z0-9_]*)[ \\t]*$";
@@ -40,8 +41,8 @@ std::string regex_rules::regex_instruction_ldstr_regind = "^[ \\t]*(ldr|str)[ \\
 std::string regex_rules::regex_instruction_ldstr_memdir_absolute = "^[ \\t]*(ldr|str)[ \\t](r[0-7]|psw|pc|sp)[,][ \\t]*([a-zA-Z][a-zA-Z0-9_]*)[ \\t]*$";
 std::string regex_rules::regex_instruction_ldstr_memdir_literal = "^[ \\t]*(ldr|str)[ \\t](r[0-7]|psw|pc|sp)[,][ \\t]*0{0,1}[xX]{0,1}([1-9][0-9a-fA-F]{0,3})[ \\t]*$";
 std::string regex_rules::regex_instruction_ldstr_pc = "^[ \\t]*(ldr|str)[ \\t](r[0-7]|psw|pc|sp)[,][ \\t]*[%]([a-zA-Z][a-zA-Z0-9_]*)[ \\t]*$";
-
-
+std::string regex_rules::regex_instruction_ldstr_displ_literal = "[ \\t]*(ldr|str)[ \\t]*(r[0-7]|psw|pc|sp)[ \\t]*[,][ \\t]*\\[(r[0-7]|psw|pc|sp)[ \\t]*[+][ \\t]*0{0,1}[xX]{0,1}([1-9][0-9a-fA-F]{0,3})\\][\\t ]*$";// group1 ->instr, group2->registar, group3->brojna vrednost bez 0x
+std::string regex_rules::regex_instruction_ldstr_displ_symbol = "[ \\t]*(ldr|str)[ \\t]*(r[0-7]|psw|pc|sp)[ \\t]*[,][ \\t]*\\[(r[0-7]|psw|pc|sp)[ \\t]*[+][ \\t]*([a-zA-Z_][a-zA-Z0-9)]*)\\][\\t ]*$";
 
 std::string regex_rules::regex_catch_first_register = "^[ \\t]*([a-zA-Z]*)[ \\t](r[0-7]|psw|pc|sp)[ \\t]*.*$";
 std::string regex_rules::regex_catch_second_register = "^[ \\t]*([a-zA-Z]*)[ \\t](r[0-7]|psw|pc|sp)[,][ \\t]*(r[0-7]|psw|pc|sp)$";

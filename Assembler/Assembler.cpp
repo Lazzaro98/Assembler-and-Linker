@@ -280,7 +280,7 @@ void Assembler::processJumpDirect2(std::string line)
 	std::smatch match;
 	if (std::regex_match(line, match, regex_jump_direct))
 		value = std::stoi(match.str(2), 0, 16); // catch literal
-	addFiveByteInstructionToBT(line_analyzer::getInstructionCode(line), 0xFF, 0, value);
+	addFiveByteInstructionToBT(line_analyzer::getInstructionCode(line), 0x00, 0, value);
 }
 
 void Assembler::processJumpRegDir2(std::string line)
@@ -331,13 +331,34 @@ void Assembler::processJumpMemDirSymbol2(std::string line)
 
 void Assembler::processJumpMemDirLiteral2(std::string line)
 {
+	int reg = line_analyzer::getRegisterCodeSecondArgument(line); // instruction code, register code, 0x01
 	int value = 0;
-	std::regex regex_jump_memdir(regex_rules::regex_instruction_jmp_memdir_literal);
+	std::regex regex_jump_memdir(regex_rules::regex_instruction_jmp_displ_literal);
 	std::smatch match;
 	if (std::regex_match(line, match, regex_jump_memdir))
-		value = std::stoi(match.str(2), 0, 16);
-	addFiveByteInstructionToBT(line_analyzer::getInstructionCode(line), 0xff, 0x04, value);
+		value = std::stoi(match.str(3), 0, 16);
+	addFiveByteInstructionToBT(line_analyzer::getInstructionCode(line), reg, 0x03, value);
+}
 
+void Assembler::processJumpDisplLiteral2(std::string line)
+{
+	int reg = line_analyzer::getRegisterCodeSecondArgument(line); // instruction code, register code, 0x01
+	int value = 0;
+	std::regex regex_jump_memdir(regex_rules::regex_instruction_jmp_displ_literal);
+	std::smatch match;
+	if (std::regex_match(line, match, regex_jump_memdir))
+		value = std::stoi(match.str(3), 0, 16);
+	addFiveByteInstructionToBT(line_analyzer::getInstructionCode(line), reg, 0x03, value);
+}
+
+void Assembler::processJumpDisplSymbol2(std::string line)
+{
+	int reg = line_analyzer::getRegisterCodeSecondArgument(line); // instruction code, register code, 0x01
+	int value = 0;
+	std::regex regex_jump_memdir(regex_rules::regex_instruction_jmp_displ_literal);
+	std::smatch match;
+	value = calculateAbsoluteSymbol(match.str(3));
+	addFiveByteInstructionToBT(line_analyzer::getInstructionCode(line), reg, 0x03, value);
 }
 
 void Assembler::processJump2(std::string line)
@@ -349,6 +370,8 @@ void Assembler::processJump2(std::string line)
 	else if (line_analyzer::isJumpAbsolute(line)) processJumpAbsolute2(line);
 	else if (line_analyzer::isJumpMemdirLiteral(line)) processJumpMemDirLiteral2(line);
 	else if (line_analyzer::isJumpMemdirSymbol(line)) processJumpMemDirSymbol2(line);
+	else if (line_analyzer::isJumpDisplSymbol(line)) processJumpDisplSymbol2(line);
+	else if (line_analyzer::isJumpDisplLiteral(line)) processJumpDisplLiteral2(line);
 }
 void Assembler::processLdstrDirectLiteral(std::string line)
 {
@@ -422,7 +445,7 @@ void Assembler::processLdstrMemdirLiteral(std::string line)
 	int val_reg = line_analyzer::getRegisterCodeFirstArgument(line);
 	int regs = (val_reg << 4) | 0x0f;
 
-	addFiveByteInstructionToBT(line_analyzer::getInstructionCode(line), regs, 0, val); //TODO: zameni kod adresiranja
+	addFiveByteInstructionToBT(line_analyzer::getInstructionCode(line), regs, 0x04, val); //TODO: zameni kod adresiranja
 }
 
 void Assembler::processLdstrPC2(std::string line)
@@ -431,13 +454,40 @@ void Assembler::processLdstrPC2(std::string line)
 	int reg_code = line_analyzer::getRegisterCodeFirstArgument(line);
 	reg_code <<= 4;
 	int regs = reg_code | 0x07;
-	int adr = 0x03;
+	int adr = 0x05;
 	std::regex regex_ldst_pc(regex_rules::regex_instruction_ldstr_pc);
 	std::smatch match;
 	std::regex_match(line, match, regex_ldst_pc);
 	value = calculatePCRelSymbol(match.str(3));
 
 	addFiveByteInstructionToBT(line_analyzer::getInstructionCode(line), regs, adr, value); // TODO" 0x02
+}
+
+void Assembler::processLdstrDisplLiteral2(std::string line)
+{
+	int val = 0;
+	std::regex regex_ldst_memdir_literal(regex_rules::regex_instruction_jmp_displ_literal);
+	std::smatch match;
+	if (std::regex_match(line, match, regex_ldst_memdir_literal))
+		val = std::stoi(match.str(3), 0, 16);
+
+	int val_reg = line_analyzer::getRegisterCodeSecondArgument(line);
+	int regs = (val_reg << 4) | 0x0f;
+
+	addFiveByteInstructionToBT(line_analyzer::getInstructionCode(line), regs, 0x04, val); //TODO: zameni kod adresiranja
+}
+
+void Assembler::processLdstrDisplSymbol2(std::string line)
+{
+	int val = 0;
+	std::regex regex_ldst_memdir_literal(regex_rules::regex_instruction_jmp_displ_literal);
+	std::smatch match;
+	
+	val = calculateAbsoluteSymbol(match.str(3));
+	int val_reg = line_analyzer::getRegisterCodeSecondArgument(line);
+	int regs = (val_reg << 4) | 0x0f;
+
+	addFiveByteInstructionToBT(line_analyzer::getInstructionCode(line), regs, 0x04, val); //TODO: zameni kod adresiranja
 }
 
 void Assembler::processLdstr2(std::string line)
@@ -456,6 +506,10 @@ void Assembler::processLdstr2(std::string line)
 		processLdstrMemdirLiteral(line);
 	else if (line_analyzer::isLdstrMemdirAbsolute(line))
 		processLdstrMemdirAbsolute(line);
+	else if (line_analyzer::isLdstrDisplLiteral(line))
+		processLdstrDisplLiteral2(line);
+	else if (line_analyzer::isLdstrDirectSymbol(line))
+		processLdstrDirectSymbol(line);
 }
 
 

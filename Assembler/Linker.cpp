@@ -17,8 +17,8 @@ void Linker::load_sections() // this function will load all all sections in a ne
 				this->section_start_addresses[s.name] = -1;
 			}
 			else {// ako jesmo, onda povecamo samo size :)
+				f.ST->find(s.name).pomeraj = this->ST->find(s.name).size;
 				this->ST->find(s.name).size += s.size;
-				f.ST->find(s.name).pomeraj = s.size;
 			}
 	}
 }
@@ -73,6 +73,66 @@ void Linker::check_externs()
 		throw "Symbols " + undefined_extern_symbols + " are declared as extern, but have never been defined anywhere.";
 	}
 }
+
+void Linker::load_reloc()
+{
+
+	std::map<std::string, File>::iterator it;
+
+	for (it = this->loaded_files.begin(); it != this->loaded_files.end(); it++)
+	{
+		File f = it->second;
+		for (auto& entry : f.RT->get_map()) {
+			std::string section = entry.first;
+			std::list<rtentry> reloc_entry;
+
+			for (rtentry r : entry.second) {
+				symbol s_old = f.ST->find(r.value); // ovo ce biti ili sekcija, ili globalni simbol
+
+				r.value = this->ST->find(s_old.name).id;
+				r.offset += this->ST->find(section).pomeraj;
+				//r.offset += this->section_start_addresses[section];
+				//std::cout << r.offset<<std::endl;
+
+				if (r.type == "R_386_16") { //TODO:
+					int l = r.offset - this->ST->find(section).pomeraj;
+
+					std::vector<char> v = this->BC->get_code_by_section(section);
+
+					char c_high = v[l];
+					char c_low = v[l + 1];
+					int nadjeno = c_high;
+					nadjeno <<= 8;
+					nadjeno = nadjeno | c_low;
+					int k = this->ST->find(s_old.name).value - this->ST->find(section).pomeraj - nadjeno;
+
+					this->BC->update(section, l, k);
+				}
+				else {
+					int l = r.offset - this->ST->find(section).pomeraj;
+
+					std::vector<char> v = this->BC->get_code_by_section(section);
+
+					char c_high = v[l];
+					char c_low = v[l + 1];
+					int nadjeno = c_high;
+					nadjeno <<= 8;
+					nadjeno = nadjeno | c_low;
+
+					int k = this->ST->find(s_old.name).value - r.offset + nadjeno;
+
+					this->BC->update(section, l, k);
+				}
+				if (s_old.section != "UNDEFINED") reloc_entry.push_back(r);
+			}
+
+			this->RT->append(section, reloc_entry);
+
+		}
+	}
+}
+
+
 
 void Linker::resolve_start_addresses()
 {
@@ -203,10 +263,11 @@ void Linker::link()
 	this->receive_from_assembler();
 	this->load_sections();
 	//this->check_externs();
-	if(this->mode == "hex")
-		this->resolve_start_addresses();
+	//if(this->mode == "hex")
+	this->resolve_start_addresses();
 	this->load_globals();
 	this->merge_code();
+	this->load_reloc();
 
 }
 

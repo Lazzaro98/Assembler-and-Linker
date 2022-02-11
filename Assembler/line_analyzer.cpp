@@ -39,8 +39,8 @@ int line_analyzer::calculate_location_counter_for_instruction(std::string line)
 		isJumpRegDir(line) || isJumpRegInd(line)) 
 			return 3;
 
-	if (isLdstrMemdirAbsolute(line) || isLdstrPC(line) || isLdstrDirectLiteral(line) || isLdstrDirectSymbol(line) ||
-		isJumpAbsolute(line) || isJumpPC(line) || isJumpMemdirLiteral(line) || isJumpMemdirSymbol(line)) 
+	if (isLdstrMemdirAbsolute(line) || isLdstrPC(line) || isLdstrDirectLiteral(line) || isLdstrDirectSymbol(line) || isLdstrDisplLiteral(line) || isLdstrDisplSymbol(line) ||
+		isJumpAbsolute(line) || isJumpPC(line) || isJumpMemdirLiteral(line) || isJumpMemdirSymbol(line) || isJumpDisplLiteral(line) || isJumpDisplSymbol(line)) 
 		return 5;
 	return 0;
 }
@@ -97,6 +97,17 @@ int line_analyzer::getRegisterCodeSecondArgument(std::string line)
 		std::smatch match;
 		if (std::regex_match(line, match, regex_catch_register))
 			return (match.str(3) == "psw") ? 8 : (match.str(3).at(1) - '0');
+	}
+	return 0;
+}
+
+int line_analyzer::getRegisterCodeThirdArgument(std::string line)
+{
+	if (isInstructionTwoOperands(line) || isLdstrRegDir(line) || isLdstrRegInd(line)) {
+		std::regex regex_catch_register(regex_rules::regex_catch_second_register);
+		std::smatch match;
+		if (std::regex_match(line, match, regex_catch_register))
+			return (match.str(4) == "psw") ? 8 : (match.str(3).at(1) - '0');
 	}
 	return 0;
 }
@@ -325,7 +336,9 @@ bool line_analyzer::isJump(std::string line) {
 		isJumpPC(line) ||
 		isJumpAbsolute(line) ||
 		isJumpMemdirSymbol(line) ||
-		isJumpMemdirLiteral(line);
+		isJumpMemdirLiteral(line) ||
+		isJumpDisplLiteral(line) ||
+		isJumpDisplSymbol(line);
 }
 
 bool line_analyzer::isJumpDirect(std::string line)
@@ -370,6 +383,18 @@ bool line_analyzer::isJumpMemdirLiteral(std::string line)
 	return regex_match(line.begin(), line.end(), regex_instruction_jmp_memdir_literal);
 }
 
+bool line_analyzer::isJumpDisplLiteral(std::string line)
+{
+	std::regex regex_instruction_jmp_displ_literal(regex_rules::regex_instruction_jmp_displ_literal);
+	return regex_match(line.begin(), line.end(), regex_instruction_jmp_displ_literal);
+}
+
+bool line_analyzer::isJumpDisplSymbol(std::string line)
+{
+	std::regex regex_instruction_jmp_displ_symbol(regex_rules::regex_instruction_jmp_displ_symbol);
+	return regex_match(line.begin(), line.end(), regex_instruction_jmp_displ_symbol);
+}
+
 // check if LD/STR
 
 
@@ -380,7 +405,9 @@ bool line_analyzer::isLdstr(std::string line)
 		isLdstrRegDir(line) ||
 		isLdstrRegInd(line) ||
 		isLdstrMemdirAbsolute(line) ||
-		isLdstrPC(line);
+		isLdstrPC(line) ||
+		isJumpDisplLiteral(line) ||
+		isJumpDisplSymbol(line);
 }
 
 bool line_analyzer::isLdstrDirectLiteral(std::string line)
@@ -423,6 +450,18 @@ bool line_analyzer::isLdstrPC(std::string line)
 {
 	std::regex regex_instruction_ldstr_pc(regex_rules::regex_instruction_ldstr_pc);
 	return regex_match(line.begin(), line.end(), regex_instruction_ldstr_pc);
+}
+
+bool line_analyzer::isLdstrDisplLiteral(std::string line)
+{
+	std::regex regex_instruction_ldstr_displ_literal(regex_rules::regex_instruction_jmp_displ_literal);
+	return regex_match(line.begin(), line.end(), regex_instruction_ldstr_displ_literal);
+}
+
+bool line_analyzer::isLdstrDisplSymbol(std::string line)
+{
+	std::regex regex_instruction_displ_symbol(regex_rules::regex_instruction_ldstr_displ_symbol);
+	return regex_match(line.begin(), line.end(), regex_instruction_displ_symbol);
 }
 
 

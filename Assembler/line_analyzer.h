@@ -20,6 +20,7 @@ public:
 	static int getInstructionCode(std::string line); // get instruction code by whole line
 	static int getRegisterCodeFirstArgument(std::string line); // Figures out what register was used as a first argument, and returns its byte code. Works for any type of instruction.
 	static int getRegisterCodeSecondArgument(std::string line);
+	static int getRegisterCodeThirdArgument(std::string line);
 
 	//get-eri
 	static int getLiteralFromSkip(std::string line);
@@ -62,6 +63,9 @@ public:
 	static bool isJumpAbsolute(std::string line);
 	static bool isJumpMemdirSymbol(std::string line);
 	static bool isJumpMemdirLiteral(std::string line);
+	static bool isJumpDisplLiteral(std::string line);
+	static bool isJumpDisplSymbol(std::string line);
+
 
 	//check if ld/str
 	static bool isLdstr(std::string line);
@@ -72,6 +76,8 @@ public:
 	static bool isLdstrMemdirAbsolute(std::string line);
 	static bool isLdstrMemdirLiteral(std::string line);
 	static bool isLdstrPC(std::string line);
+	static bool isLdstrDisplLiteral(std::string line);
+	static bool isLdstrDisplSymbol(std::string line);
 
 	// calculate codes
 

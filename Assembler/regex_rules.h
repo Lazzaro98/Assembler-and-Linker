@@ -33,6 +33,8 @@ public:
 	static std::string regex_instruction_jmp_absolute;
 	static std::string regex_instruction_jmp_memdir_symbol;
 	static std::string regex_instruction_jmp_memdir_literal;
+	static std::string regex_instruction_jmp_displ_literal;
+	static std::string regex_instruction_jmp_displ_symbol;
 
 	//all types of ld/strs
 	static std::string regex_instruction_ldstr_direct_literal;
@@ -42,6 +44,8 @@ public:
 	static std::string regex_instruction_ldstr_memdir_absolute;
 	static std::string regex_instruction_ldstr_memdir_literal;
 	static std::string regex_instruction_ldstr_pc;
+	static std::string regex_instruction_ldstr_displ_literal;
+	static std::string regex_instruction_ldstr_displ_symbol;
 
 	// regex to capture first argument which is register in any instruction
 	static std::string regex_catch_first_register;

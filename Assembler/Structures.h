@@ -93,6 +93,14 @@ public:
 		else return undefinedSymbol;
 	}
 
+	symbol& find(int id) {
+		for (auto& entry : symbol_table) {
+			if (entry.second.id == id)
+				return entry.second;
+		}
+		return undefinedSymbol;
+	}
+
 	bool exists(std::string name) {
 		std::map<std::string, symbol>::iterator it = symbol_table.find(name);
 		bool exists = !(it == symbol_table.end());
@@ -129,12 +137,15 @@ public:
 
 	void print() {
 		std::cout << "Symbol table:" << std::endl;
-		VariadicTable<std::string, int, std::string, std::string, int, int> vt({ "Symbol", "Value", "Type", "Section", "Id", "Size" },
+		VariadicTable<std::string, std::string, std::string, std::string, int, int> vt({ "Symbol", "Value", "Type", "Section", "Id", "Size" },
 			10);
 		for (auto& entry : symbol_table) {
 			std::string type = "g";
 			if (entry.second.is_global == false) type = "l";
-			vt.addRow(entry.second.name, entry.second.value, type, entry.second.section, entry.second.id, entry.second.size);
+			char hex_string[20];
+			sprintf_s(hex_string, "%X", entry.second.value);
+			std::string s(hex_string);
+			vt.addRow(entry.second.name, s , type, entry.second.section, entry.second.id, entry.second.size);
 		}
 
 		vt.print(std::cout);
@@ -142,12 +153,15 @@ public:
 
 	void print_save(std::string filename = "output.txt") {
 		std::ofstream file(filename);
-		VariadicTable<std::string, int, std::string, std::string, int, int> vt({ "Symbol", "V", "Type", "Section", "Id", "Size" },
+		VariadicTable<std::string, std::string, std::string, std::string, int, int> vt({ "Symbol", "V", "Type", "Section", "Id", "Size" },
 			10);
 		for (auto& entry : symbol_table) {
 			std::string type = "g";
+			char hex_string[20];
+			sprintf_s(hex_string, "%X", entry.second.value);
+			std::string s(hex_string);
 			if (entry.second.is_global == false) type = "l";
-			vt.addRow(entry.second.name, entry.second.value, type, entry.second.section, entry.second.id, entry.second.size);
+			vt.addRow(entry.second.name,s, type, entry.second.section, entry.second.id, entry.second.size);
 		}
 
 		vt.print(file);
@@ -174,17 +188,17 @@ public:
 class BinaryCode
 {
 private:
-	std::map<std::string, std::vector<char> > relocation_table;
+	std::map<std::string, std::vector<char> > binary_code;
 	std::map<std::string, int> start_addresses;
 public:
 	void addByte(std::string section, char byte)
 	{
-		this->relocation_table[section].push_back(byte);
+		this->binary_code[section].push_back(byte);
 	}
 	void addWord(std::string section, int wordValue)
 	{
-		this->relocation_table[section].push_back((((unsigned)wordValue) >> 8) & 0xFF);
-		this->relocation_table[section].push_back(((unsigned)wordValue) & 0xFF);
+		this->binary_code[section].push_back((((unsigned)wordValue) >> 8) & 0xFF);
+		this->binary_code[section].push_back(((unsigned)wordValue) & 0xFF);
 	}
 	void addWord(std::string section, std::string word)
 	{
@@ -195,15 +209,21 @@ public:
 			addByte(section, c);
 		}
 	}
-	std::vector<char> get_code_by_section(std::string section) {
-		return this->relocation_table[section];
+	void update(std::string section, int index, int value)
+	{
+		this->binary_code[section][index] = ((((unsigned)value) >> 8) & 0xFF);
+		this->binary_code[section][index + 1] = (((unsigned)value) & 0xFF);
 	}
+	std::vector<char> get_code_by_section(std::string section) {
+		return this->binary_code[section];
+	}
+
 	void clear()
 	{
-		this->relocation_table.clear();
+		this->binary_code.clear();
 	}
 	void print() {
-		for (const auto& elem : this->relocation_table)
+		for (const auto& elem : this->binary_code)
 		{
 			std::cout << elem.first << " -> ";
 			for (char i : elem.second)
@@ -213,7 +233,7 @@ public:
 	}
 	void print_hex() {
 		int cnt = 0;
-		for (const auto& elem : this->relocation_table)
+		for (const auto& elem : this->binary_code)
 		{
 			std::cout << elem.first << ":";
 			cnt = this->start_addresses[elem.first];
@@ -246,7 +266,7 @@ public:
 	void print_hex_save(std::string filename = "output.txt") {
 		std::ofstream file(filename);
 		int cnt = 0;
-		for (const auto& elem : this->relocation_table)
+		for (const auto& elem : this->binary_code)
 		{
 			file << elem.first << ":";
 			cnt = this->start_addresses[elem.first];
@@ -277,7 +297,7 @@ public:
 	}
 	void print_save(std::string filename = "output.txt") {
 		std::ofstream file(filename, std::ios_base::app);
-		for (const auto& elem : this->relocation_table)
+		for (const auto& elem : this->binary_code)
 		{
 			file << elem.first << "\n";
 			for (char i : elem.second)
@@ -289,7 +309,7 @@ public:
 	void send_to_linker(std::string filename = "output.txt")
 	{
 		std::ofstream file(filename, std::ios_base::app);
-		for (const auto& elem : this->relocation_table)
+		for (const auto& elem : this->binary_code)
 		{
 			file << elem.first << "\n";
 			for (char i : elem.second)
@@ -329,6 +349,22 @@ public:
 	{
 		this->add(section, rtentry(type, offset, value));
 	}
+
+	std::map<std::string, std::list<rtentry>> get_map() {
+		return this->relocation_table;
+	}
+
+	std::list<rtentry> get_relocation_list(std::string section)
+	{
+		return this->relocation_table[section];
+	}
+
+	void append(std::string section, std::list<rtentry> er)
+	{
+		for (rtentry r : er)
+			this->add(section, r);
+	}
+
 	void print()
 	{
 
@@ -387,6 +423,8 @@ public:
 	{
 		this->relocation_table.clear();
 	}
+
+
 };
 
 struct section
