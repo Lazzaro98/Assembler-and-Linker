@@ -19,24 +19,13 @@ int main(int argc, char** argv)
 {
     try {
 
-		std::string output_file_name = "output.txt"; // default values
-		std::string input_file_name = "input.txt";
-		load_program_arguments(argc, argv, &input_file_name, &output_file_name); // load if there are program arguments
-
-		Assembler* assembler = new Assembler(input_file_name, output_file_name);
-		assembler->first_pass();
-		assembler->print_symbol_table();
-		assembler->second_pass();
-		assembler->print_relocation_tables();
-		assembler->print_code_with_addresses();
-		assembler->send_all_to_linker();
-		/*Linker* linker = new Linker(argc, argv);
-		
+		std::string output_file_name = "output.o"; // default values
+		std::string input_file_name = "test.s";
+		Linker* linker = new Linker(argc, argv);
+		linker->load_arguments(argc, argv);
+		linker->receive_from_assembler();
 		linker->link();
-		linker->print_symbol_table();
-		linker->print_hex();
-		linker->print_code();
-		linker->save_code_hex_in_file();*/
+		linker->output();
     }
     catch (std::string msg) {
         std::cout << "ERROR: ";
@@ -44,3 +33,30 @@ int main(int argc, char** argv)
     }
 }
 
+
+/*
+
+int main(int argc, char** argv)
+{
+	try {
+
+		std::string output_file_name = "output.o"; // default values
+		std::string input_file_name = "test.s";
+		load_program_arguments(argc, argv, &input_file_name, &output_file_name); // load if there are program arguments
+		Assembler* assembler = new Assembler(input_file_name, output_file_name);
+		assembler->first_pass();
+		assembler->second_pass();
+		assembler->save_symbol_table_in_file();
+		assembler->save_relocation_tables_in_file();
+		assembler->save_code_in_file();
+		assembler->send_all_to_linker();
+
+	}
+	catch (std::string msg) {
+		std::cout << "ERROR: ";
+		std::cout << msg << '\n';
+	}
+}
+
+
+*/

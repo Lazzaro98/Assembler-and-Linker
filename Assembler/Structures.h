@@ -142,7 +142,7 @@ public:
 
 	void print_save(std::string filename = "output.txt") {
 		std::ofstream file(filename);
-		VariadicTable<std::string, int, std::string, std::string, int, int> vt({ "Symbol", "Value", "Type", "Section", "Id", "Size" },
+		VariadicTable<std::string, int, std::string, std::string, int, int> vt({ "Symbol", "V", "Type", "Section", "Id", "Size" },
 			10);
 		for (auto& entry : symbol_table) {
 			std::string type = "g";
@@ -155,9 +155,9 @@ public:
 		file.close();
 	}
 
-	void send_to_linker()
+	void send_to_linker(std::string filename = "output.txt")
 	{
-		std::ofstream file(FILE_FOR_LINKER);
+		std::ofstream file(filename);
 		for (auto& entry : symbol_table) {
 			std::string type = "g";
 			if (entry.second.is_global == false) type = "l";
@@ -286,9 +286,9 @@ public:
 		}
 	}
 
-	void send_to_linker()
+	void send_to_linker(std::string filename = "output.txt")
 	{
-		std::ofstream file(FILE_FOR_LINKER, std::ios_base::app);
+		std::ofstream file(filename, std::ios_base::app);
 		for (const auto& elem : this->relocation_table)
 		{
 			file << elem.first << "\n";
@@ -363,9 +363,9 @@ public:
 		file.close();
 	}
 
-	void send_to_linker()
+	void send_to_linker(std::string filename = "output.txt")
 	{
-		std::ofstream file(FILE_FOR_LINKER, std::ios_base::app);
+		std::ofstream file(filename, std::ios_base::app);
 		//file.open();
 		for (auto& entry : relocation_table)
 		{//za svaku tabelu
@@ -426,8 +426,8 @@ public:
 		}
 		return -1;
 	}
-	void send_to_linker() {
-		std::ofstream file(FILE_FOR_LINKER, std::ios_base::app);
+	void send_to_linker(std::string filename = "output.txt") {
+		std::ofstream file(filename, std::ios_base::app);
 		for (auto& s : section_list)
 			file << s.name << "," << s.id << std::endl;
 		file << "SLEND" << std::endl;

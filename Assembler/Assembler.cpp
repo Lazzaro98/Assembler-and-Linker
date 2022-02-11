@@ -519,10 +519,10 @@ void Assembler::print_relocation_tables()
 
 void Assembler::send_all_to_linker()
 {
-	this->ST->send_to_linker();
-	this->RT->send_to_linker();
-	this->BC->send_to_linker();
-	this->SL->send_to_linker();
+	this->ST->send_to_linker(this->output_file_name);
+	this->RT->send_to_linker(this->output_file_name);
+	this->BC->send_to_linker(this->output_file_name);
+	this->SL->send_to_linker(this->output_file_name);
 }
 
 void Assembler::processEnd1(std::string line) {

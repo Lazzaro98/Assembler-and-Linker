@@ -1,5 +1,4 @@
-#ifndef _variadic_table_h_
-#define _variadic_table_h_
+#pragma once
 
 #include <iostream>
 #include <iomanip>
@@ -277,7 +276,7 @@ protected:
         if (data == 0)
             return 1;
 
-        return std::log10(data) + 1;
+        return data < 0 ? std::log10(data * (-1)) + 1 : std::log10(data) + 1;
     }
 
     /**
@@ -380,5 +379,3 @@ protected:
     /// Precision For each column
     std::vector<int> _precision;
 };
-
-#endif

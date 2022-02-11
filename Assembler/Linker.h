@@ -42,7 +42,7 @@ public:
 	}
 	void load_arguments(int argc, char* argv[]); // just loads arguments from the args
 	void receive_from_assembler(); // loads information about assemble-ed code
-
+	void output();
 
 	// private functions, but public now for testing
 	

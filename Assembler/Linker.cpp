@@ -186,13 +186,25 @@ void Linker::receive_from_assembler()
 	}
 }
 
+void Linker::output()
+{
+	if (this->mode == "hex")
+		this->save_code_hex_in_file();
+	if (this->mode == "linkable") {
+		this->save_symbol_table_in_file();
+		this->save_relocation_tables_in_file();
+		this->save_code_in_file();
+	}
+}
+
 void Linker::link()
 {
 
 	this->receive_from_assembler();
 	this->load_sections();
 	//this->check_externs();
-	this->resolve_start_addresses();
+	if(this->mode == "hex")
+		this->resolve_start_addresses();
 	this->load_globals();
 	this->merge_code();
 
