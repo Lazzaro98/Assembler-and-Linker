@@ -104,7 +104,7 @@ void Linker::load_reloc()
 					int nadjeno = c_high;
 					nadjeno <<= 8;
 					nadjeno = nadjeno | c_low;
-					int k = this->ST->find(s_old.name).value - this->ST->find(section).pomeraj - nadjeno;
+					int k = this->ST->find(s_old.name).value - this->ST->find(section).pomeraj + nadjeno;
 
 					this->BC->update(section, l, k);
 				}
