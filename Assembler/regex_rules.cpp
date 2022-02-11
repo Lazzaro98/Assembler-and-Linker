@@ -43,7 +43,7 @@ std::string regex_rules::regex_instruction_ldstr_pc = "^[ \\t]*(ldr|str)[ \\t](r
 
 
 
-std::string regex_rules::regex_catch_first_register = "^[ \\t]*([a-zA-Z]*)[ \\t](r[0-7]|psw|pc|sp)[,][ \\t]*.*$";
+std::string regex_rules::regex_catch_first_register = "^[ \\t]*([a-zA-Z]*)[ \\t](r[0-7]|psw|pc|sp)[ \\t]*.*$";
 std::string regex_rules::regex_catch_second_register = "^[ \\t]*([a-zA-Z]*)[ \\t](r[0-7]|psw|pc|sp)[,][ \\t]*(r[0-7]|psw|pc|sp)$";
 
 

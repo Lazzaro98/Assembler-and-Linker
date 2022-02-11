@@ -179,9 +179,9 @@ void Assembler::processWord2(std::string line)
 		if (s.name == "NOT_FOUND") // if symbol doesn't exist in symbol table, it is error. Because all symbols need to be in symbol table after 1st pass
 			throw "Word " + line_analyzer::getWordSymbolName(line) + " was not defined.";
 		else { // if it is found
-			if (s.section == "ABSOLUTE") 
+			if (s.section == "ABSOLUTE")
 				BC->addWord(this->current_section, s.value);
-			else if (s.is_global) { 
+			else if (s.is_global) {
 				this->BC->addWord(this->current_section, 0); // add 0x00 code
 				this->RT->add(this->current_section, "R_386_16", this->location_counter, s.id); // add reloc
 			}
@@ -248,13 +248,15 @@ void Assembler::processInstructionOneOperand(std::string line)
 	//this->BC->addWord(this->current_section, this->location_counter);
 	this->BC->addByte(this->current_section, line_analyzer::getInstructionCode(line));
 	std::string instruction = line_analyzer::getInstructionName(line);
-	if (instruction == "int" || instruction == "not") 
-		this->BC->addByte(this->current_section, (line_analyzer::getRegisterCodeFirstArgument(line) << 4) + 15);
-	if (instruction == "push" || instruction == "pop") 
-		this->BC->addByte(this->current_section, (line_analyzer::getRegisterCodeFirstArgument(line) << 4) + 6);
-	if (instruction == "pop") 
+	if (instruction == "int" || instruction == "not")
+		this->BC->addByte(this->current_section, (line_analyzer::getRegisterCodeFirstArgument(line) << 4) | 0x0F);
+	if (instruction == "push")
+		this->BC->addByte(this->current_section, line_analyzer::getRegisterCodeFirstArgument(line) | (6 << 4));
+	if (instruction == "pop")
+		this->BC->addByte(this->current_section, (line_analyzer::getRegisterCodeFirstArgument(line) << 4) | 0x06);
+	if (instruction == "pop")
 		this->BC->addByte(this->current_section, 0x42);
-	if (instruction == "push") 
+	if (instruction == "push")
 		this->BC->addByte(this->current_section, 0x12);
 
 }
@@ -405,7 +407,7 @@ void Assembler::processLdstrMemdirAbsolute(std::string line)
 	int val_reg = line_analyzer::getRegisterCodeFirstArgument(line);
 	int regs = (val_reg << 4) | 0x00;
 
-	addFiveByteInstructionToBT(line_analyzer::getInstructionCode(line), regs, 0, value); // TODO: change byte for addressing
+	addFiveByteInstructionToBT(line_analyzer::getInstructionCode(line), regs, 0x04, value); // TODO: change byte for addressing
 
 }
 
@@ -428,31 +430,31 @@ void Assembler::processLdstrPC2(std::string line)
 	int value = 0;
 	int reg_code = line_analyzer::getRegisterCodeFirstArgument(line);
 	reg_code <<= 4;
-	int regs = reg_code + 0x07;
+	int regs = reg_code | 0x07;
 	int adr = 0x03;
 	std::regex regex_ldst_pc(regex_rules::regex_instruction_ldstr_pc);
 	std::smatch match;
 	std::regex_match(line, match, regex_ldst_pc);
 	value = calculatePCRelSymbol(match.str(3));
 
-	addFiveByteInstructionToBT(line_analyzer::getInstructionCode(line), reg_code, adr, value); // TODO" 0x02
+	addFiveByteInstructionToBT(line_analyzer::getInstructionCode(line), regs, adr, value); // TODO" 0x02
 }
 
 void Assembler::processLdstr2(std::string line)
 {
-	if (line_analyzer::isLdstrRegDir(line)) 
+	if (line_analyzer::isLdstrRegDir(line))
 		processLdstrRegDir2(line);
-	else if (line_analyzer::isLdstrRegInd(line)) 
+	else if (line_analyzer::isLdstrRegInd(line))
 		processLdstrRegInd2(line);
-	else if (line_analyzer::isLdstrDirectLiteral(line)) 
+	else if (line_analyzer::isLdstrDirectLiteral(line))
 		processLdstrDirectLiteral(line);
-	else if (line_analyzer::isLdstrDirectSymbol(line)) 
+	else if (line_analyzer::isLdstrDirectSymbol(line))
 		processLdstrDirectSymbol(line);
-	else if (line_analyzer::isLdstrPC(line)) 
+	else if (line_analyzer::isLdstrPC(line))
 		processLdstrPC2(line);
 	else if (line_analyzer::isLdstrMemdirLiteral(line))
 		processLdstrMemdirLiteral(line);
-	else if (line_analyzer::isLdstrMemdirAbsolute(line)) 
+	else if (line_analyzer::isLdstrMemdirAbsolute(line))
 		processLdstrMemdirAbsolute(line);
 }
 
@@ -494,7 +496,7 @@ void Assembler::print_code()
 	this->BC->print();
 }
 
-void Assembler::print_code_with_addresses() 
+void Assembler::print_code_with_addresses()
 {
 	this->BC->print_hex();
 }
