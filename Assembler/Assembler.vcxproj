@@ -142,9 +142,10 @@
     <ClCompile Include="Assembler.cpp" />
     <ClCompile Include="File.cpp" />
     <ClCompile Include="Linker.cpp" />
-    <ClCompile Include="main.cpp" />
+    <ClCompile Include="assembler_main.cpp" />
     <ClCompile Include="FileReader.cpp" />
     <ClCompile Include="line_analyzer.cpp" />
+    <ClCompile Include="linker_main.cpp" />
     <ClCompile Include="regex_rules.cpp" />
   </ItemGroup>
   <ItemGroup>

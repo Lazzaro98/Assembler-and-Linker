@@ -1,7 +1,0 @@
-# file: interrupts.s
-.section ivt
-.extern myStart, myCounter
-.section p
-isr_reset:
-  jmp myStart
-.end

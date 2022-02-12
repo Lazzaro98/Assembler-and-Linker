@@ -134,6 +134,19 @@ public:
 		return externs;
 	}
 
+	bool is_section(std::string name) {
+		for (auto& entry : symbol_table) 
+			if (entry.second.section == name && entry.first == name)
+				return true;
+			return false;
+	}
+
+	bool is_section(int id) {
+		for (auto& entry : symbol_table)
+			if (entry.second.section == entry.first && entry.second.id==id)
+				return true;
+		return false;
+	}
 
 	void print() {
 		std::cout << "Symbol table:" << std::endl;

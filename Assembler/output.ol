@@ -1,7 +1,7 @@
 ABSOLUTE,0,l,ABSOLUTE,1,0
 UNDEFINED,0,l,UNDEFINED,0,0
 myCode,0,l,myCode,4,28
-myCounter,20,g,myData,3,0
+myCounter,0,g,myData,3,0
 myData,0,l,myData,7,2
 myStart,0,g,myCode,2,0
 tim_cfg,65296,g,ABSOLUTE,5,0

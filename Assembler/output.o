@@ -1,23 +1,26 @@
-ABSOLUTE,0,l,ABSOLUTE,1,0
-UNDEFINED,0,l,UNDEFINED,0,0
-isr_reset,0,l,p,6,0
-ivt,0,l,ivt,2,0
-myCounter,0,g,UNDEFINED,4,0
-myStart,0,g,UNDEFINED,3,0
-p,0,l,p,5,5
-STEND
+---------------------------------------------------
+|  Symbol   |   V  | Type |  Section  | Id | Size |
+---------------------------------------------------
+| ABSOLUTE  | 0    | l    | ABSOLUTE  |  1 |    0 |
+| UNDEFINED | 0    | l    | UNDEFINED |  0 |    0 |
+| myCode    | 0    | l    | myCode    |  4 |   28 |
+| myCounter | 0    | g    | myData    |  3 |    0 |
+| myData    | 0    | l    | myData    |  7 |    2 |
+| myStart   | 0    | g    | myCode    |  2 |    0 |
+| tim_cfg   | FF10 | g    | ABSOLUTE  |  5 |    0 |
+| wait      | A    | l    | myCode    |  6 |    0 |
+---------------------------------------------------
 
-p
-R_386_16,3,3
+myCode
+-----------------------------
+|   Type   | Offset | Value |
+-----------------------------
+| R_386_16 |     13 |     3 |
+| R_386_16 |     25 |     4 |
+-----------------------------
+myCode
+0xa0 0x00 0x00 0x00 0x01 0x80 0x00 0x04 0xff 0x10 0xa0 0x10 0x04 0x00 0x00 0xa0 0x10 0x00 0x00 0x05 0x74 0x01 0x52 0xf0 0x00 0x00 0x0a 0x00 
 
-RTEND
+myData
+0x00 0x00 
 
-p
-80,240,0,0,0,
-BCEND
-
-UNDEFINED,0
-ABSOLUTE,1
-ivt,2
-p,5
-SLEND

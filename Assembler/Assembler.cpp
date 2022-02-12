@@ -524,9 +524,9 @@ void Assembler::first_pass()
 		if (line != "EOF") processLine1(line);
 	}
 }
-void Assembler::save_symbol_table_in_file()
+void Assembler::save_symbol_table_in_file(std::string output_file_name)
 {
-	this->ST->print_save();
+	this->ST->print_save(output_file_name);
 }
 
 void Assembler::print_symbol_table()
@@ -555,15 +555,15 @@ void Assembler::print_code_with_addresses()
 	this->BC->print_hex();
 }
 
-void Assembler::save_code_in_file()
+void Assembler::save_code_in_file(std::string output_file_name)
 {
-	this->BC->print_save();
+	this->BC->print_save(output_file_name);
 
 }
 
-void Assembler::save_relocation_tables_in_file()
+void Assembler::save_relocation_tables_in_file(std::string output_file_name)
 {
-	this->RT->print_save();
+	this->RT->print_save(output_file_name);
 }
 
 void Assembler::print_relocation_tables()
@@ -573,10 +573,10 @@ void Assembler::print_relocation_tables()
 
 void Assembler::send_all_to_linker()
 {
-	this->ST->send_to_linker(this->output_file_name);
-	this->RT->send_to_linker(this->output_file_name);
-	this->BC->send_to_linker(this->output_file_name);
-	this->SL->send_to_linker(this->output_file_name);
+	this->ST->send_to_linker(this->output_file_name+"l");
+	this->RT->send_to_linker(this->output_file_name+"l");
+	this->BC->send_to_linker(this->output_file_name+"l");
+	this->SL->send_to_linker(this->output_file_name+"l");
 }
 
 void Assembler::processEnd1(std::string line) {

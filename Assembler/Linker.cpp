@@ -55,18 +55,17 @@ void Linker::check_externs()
 				externs.insert(s);
 		}
 	} // kada smo skupili sve externe u jedan set, sada cemo da vidimo da li su oni svi definisani svaki bar u jednom fajlu.
-
+	int cnt = 0;
 	for (it = this->loaded_files.begin(); it != this->loaded_files.end(); it++)
 	{
 		File f = it->second;
 		std::list<symbol> local_externs = f.ST->get_externs();
 		for (auto s : local_externs)
 			if (this->ST->exists(s.name)) { // ako do sada nismo dodali tu sekciju, dodamo je
-				if (s.name != "UNDEFINED")
-					externs.erase(s);
+				cnt++;
 			}
 	}
-	if (externs.size() > 0) {
+	if (externs.size() > cnt) { // brojimo cnt-om koliko smo externa razresili. Ako smo razresili onoliko externa koliko je postojalo, gg.
 		std::string undefined_extern_symbols = "";
 		for (auto s : externs)
 			undefined_extern_symbols += s.name + ", ";
@@ -119,17 +118,22 @@ void Linker::load_reloc()
 					nadjeno <<= 8;
 					nadjeno = nadjeno | c_low;
 
-					int k = this->ST->find(s_old.name).value - r.offset + nadjeno;
-
+					int k = 0;
+					if (!f.ST->is_section(r.value))
+						k = this->ST->find(s_old.name).value - r.offset + nadjeno;
+					else
+						l = this->ST->find(r.value).pomeraj - r.offset + nadjeno;
 					this->BC->update(section, l, k);
 				}
-				if (s_old.section != "UNDEFINED") reloc_entry.push_back(r);
+				
+				if (!(this->ST->find(r.value).name == section))
+					reloc_entry.push_back(r);
 			}
 
 			this->RT->append(section, reloc_entry);
-
 		}
 	}
+
 }
 
 
@@ -228,7 +232,9 @@ void Linker::load_arguments(int argc, char* argv[])
 		if (argument.substr(0, 1) != "-") {
 			argument = argv[i];
 			while (i < argc) {
-				this->input_files.push_back(argv[i++]);
+				std::string s = argv[i++];
+				s = s + "l";
+				this->input_files.push_back(s);
 			}
 		}
 	}
@@ -262,9 +268,12 @@ void Linker::link()
 
 	this->receive_from_assembler();
 	this->load_sections();
-	//this->check_externs();
-	//if(this->mode == "hex")
-	this->resolve_start_addresses();
+	this->check_externs();
+	if (this->mode == "hex")
+		this->resolve_start_addresses();
+	else
+		for (auto& s : this->section_start_addresses)
+			s.second = 0;
 	this->load_globals();
 	this->merge_code();
 	this->load_reloc();

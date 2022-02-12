@@ -92,12 +92,12 @@ public:
 
 	// first pass public methods
 	void first_pass();
-	void save_symbol_table_in_file();
+	void save_symbol_table_in_file(std::string output_file_name);
 	void print_symbol_table();
 	void second_pass();
 	void print_code();
-	void save_code_in_file();
-	void save_relocation_tables_in_file();
+	void save_code_in_file(std::string output_file_name);
+	void save_relocation_tables_in_file(std::string output_file_name);
 	void print_relocation_tables();
 	void print_code_with_addresses();
 	void send_all_to_linker();
