@@ -1,5 +1,5 @@
-#include "Linker.h"
-#include "regex_rules.h"
+#include "../inc/Linker.h"
+#include "../inc/regex_rules.h"
 void Linker::load_sections() // this function will load all all sections in a new symbol table. It will update only their sizes.
 {
 	std::map<std::string, File>::iterator it;
@@ -252,6 +252,14 @@ void Linker::receive_from_assembler()
 	}
 }
 
+void Linker::delete_ol_files() {
+	for (std::string file_name : input_files)
+	{
+		File* f = new File(file_name); // ucitaj File 
+		f->FR->delete_file();
+	}
+}
+
 void Linker::output()
 {
 	if (this->mode == "hex")
@@ -261,7 +269,11 @@ void Linker::output()
 		this->save_relocation_tables_in_file();
 		this->save_code_in_file();
 	}
+	//delete_ol_files();
 }
+
+
+
 
 void Linker::link()
 {
@@ -319,3 +331,4 @@ void Linker::save_code_hex_in_file()
 {
 	this->BC->print_hex_save(this->output_filename);
 }
+

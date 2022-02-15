@@ -22,6 +22,7 @@ public:
 	bool load();
 	bool reload();
 	std::string readln();
+	void delete_file();
 };
 
 #endif

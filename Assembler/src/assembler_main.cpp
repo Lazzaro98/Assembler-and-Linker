@@ -1,7 +1,7 @@
 
-#include "Assembler.h"
-#include "Linker.h"
-#include "File.h"
+#include "../inc/Assembler.h"
+#include "../inc/Linker.h"
+#include "../inc/File.h"
 void load_program_arguments(int argc, char** argv, std::string* input_file_name, std::string* output_file_name) {
 	if (argc > 1) {
 		if (argv[2] != "-o" && argv[2] != "-O") {
@@ -21,7 +21,7 @@ int main(int argc, char** argv)
 
 		std::string output_file_name = "output.o"; // default values
 		std::string input_file_name = "input.s";
-		load_program_arguments(argc, argv, &input_file_name, &output_file_name); // load if there are program arguments
+		//load_program_arguments(argc, argv, &input_file_name, &output_file_name); // load if there are program arguments
 		Assembler* assembler = new Assembler(input_file_name, output_file_name);
 		assembler->first_pass();
 		assembler->second_pass();
@@ -36,5 +36,6 @@ int main(int argc, char** argv)
 		std::cout << msg << '\n';
 	}
 }
-*/
 
+
+*/

@@ -1,6 +1,6 @@
 
-#include "Linker.h"
-#include "File.h"
+#include "../inc/Linker.h"
+#include "../inc/File.h"
 
 int main(int argc, char** argv)
 {

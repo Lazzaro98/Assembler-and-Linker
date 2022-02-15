@@ -1,4 +1,4 @@
-#include "line_analyzer.h"
+#include "../inc/line_analyzer.h"
 int line_analyzer::hextoint(std::string s)
 {
 	int x;
@@ -124,7 +124,7 @@ int line_analyzer::getInstructionCodeByInstructionName(std::string code)
 		if (code == "jeq")return 0x51;
 		if (code == "jne")return 0x52;
 		if (code == "jgt")return 0x53;
-		if (code == "ldr")return 0xA0;
+		if (code.compare("ldr")==0)return 0xA0;
 		if (code == "shr")return 0x91;
 		if (code == "str")return 0x80;
 		if (code == "push")return 0xB0;

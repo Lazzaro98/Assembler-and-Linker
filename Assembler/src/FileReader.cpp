@@ -1,4 +1,4 @@
-#include "FileReader.h"
+#include "../inc/FileReader.h"
 #include <iostream>
 FileReader::FileReader(std::string filename)
 {
@@ -41,4 +41,10 @@ std::string FileReader::readln()
 	std::string line;
 	if (std::getline(this->file, line)) return line;
 	else return "EOF";
+}
+
+void FileReader::delete_file()
+{
+	this->file.close();
+	int status = std::remove(this->input_filename.c_str());
 }

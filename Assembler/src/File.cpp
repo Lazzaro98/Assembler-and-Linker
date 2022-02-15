@@ -1,4 +1,4 @@
-#include "File.h"
+#include "../inc/File.h"
 
 
 
@@ -57,4 +57,9 @@ void File::receive_from_assembler()
 		std::vector<std::string> list = line_analyzer::split(line, ',');
 		if (list[0] != "UNDEFINED" && list[0] != "ABSOLUTE")this->SL->add(list[0], stoi(list[1]));
 	}
+}
+
+void File::delete_file()
+{
+	this->FR->delete_file();
 }

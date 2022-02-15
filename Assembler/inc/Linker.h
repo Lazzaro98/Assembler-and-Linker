@@ -61,6 +61,8 @@ public:
 	void save_relocation_tables_in_file();
 	void save_code_hex_in_file();
 
+	void delete_ol_files();
+
 };
 //testing git
 #endif // !_LINKER_H_

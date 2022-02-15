@@ -24,6 +24,7 @@ public:
 	void receive_from_assembler();
 	void set_filename(std::string filename) { this->filename = filename; }
 	std::string get_filename() { return this->filename; }
+	void delete_file();
 
 };
 #endif // ! _FILE_H_
