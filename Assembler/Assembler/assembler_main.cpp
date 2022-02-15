@@ -1,7 +1,7 @@
 
-#include "../inc/Assembler.h"
-#include "../inc/Linker.h"
-#include "../inc/File.h"
+#include "Assembler.h"
+#include "../Linker/Linker.h"
+#include "../Util/File.h"
 void load_program_arguments(int argc, char** argv, std::string* input_file_name, std::string* output_file_name) {
 	if (argc > 1) {
 		if (argv[2] != "-o" && argv[2] != "-O") {

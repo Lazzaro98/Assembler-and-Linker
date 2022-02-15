@@ -1,4 +1,4 @@
-#include "../inc/line_analyzer.h"
+#include "../Util/line_analyzer.h"
 int line_analyzer::hextoint(std::string s)
 {
 	int x;

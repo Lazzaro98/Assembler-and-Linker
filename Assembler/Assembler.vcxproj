@@ -140,24 +140,24 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="src\Assembler.cpp" />
-    <ClCompile Include="src\File.cpp" />
-    <ClCompile Include="src\Linker.cpp" />
-    <ClCompile Include="src\assembler_main.cpp" />
-    <ClCompile Include="src\FileReader.cpp" />
-    <ClCompile Include="src\line_analyzer.cpp" />
-    <ClCompile Include="src\linker_main.cpp" />
-    <ClCompile Include="src\regex_rules.cpp" />
+    <ClCompile Include="Assembler\Assembler.cpp" />
+    <ClCompile Include="Util\File.cpp" />
+    <ClCompile Include="Linker\Linker.cpp" />
+    <ClCompile Include="Assembler\assembler_main.cpp" />
+    <ClCompile Include="Util\FileReader.cpp" />
+    <ClCompile Include="Util\line_analyzer.cpp" />
+    <ClCompile Include="Linker\linker_main.cpp" />
+    <ClCompile Include="Util\regex_rules.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="inc\Assembler.h" />
-    <ClInclude Include="inc\File.h" />
-    <ClInclude Include="inc\FileReader.h" />
-    <ClInclude Include="inc\line_analyzer.h" />
-    <ClInclude Include="inc\Linker.h" />
-    <ClInclude Include="inc\regex_rules.h" />
-    <ClInclude Include="inc\Structures.h" />
-    <ClInclude Include="inc\Variadic_table.h" />
+    <ClInclude Include="Assembler\Assembler.h" />
+    <ClInclude Include="Util\File.h" />
+    <ClInclude Include="Util\FileReader.h" />
+    <ClInclude Include="Util\line_analyzer.h" />
+    <ClInclude Include="Linker\Linker.h" />
+    <ClInclude Include="Util\regex_rules.h" />
+    <ClInclude Include="Util\Structures.h" />
+    <ClInclude Include="Util\Variadic_table.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

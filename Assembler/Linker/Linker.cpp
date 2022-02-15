@@ -1,5 +1,5 @@
-#include "../inc/Linker.h"
-#include "../inc/regex_rules.h"
+#include "Linker.h"
+#include "../Util/regex_rules.h"
 void Linker::load_sections() // this function will load all all sections in a new symbol table. It will update only their sizes.
 {
 	std::map<std::string, File>::iterator it;

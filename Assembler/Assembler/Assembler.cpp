@@ -1,4 +1,4 @@
-#include "../inc/Assembler.h"
+#include "Assembler.h"
 
 void Assembler::processLabel1(std::string line)
 {

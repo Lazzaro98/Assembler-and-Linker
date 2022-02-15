@@ -1,4 +1,4 @@
-#include "../inc/regex_rules.h"
+#include "regex_rules.h"
 
 std::string regex_rules::regex_empty = "^\\s*$";
 std::string regex_rules::regex_label = "\s*([a-zA-Z][a-zA-Z0-9_]*)[:]\s*";

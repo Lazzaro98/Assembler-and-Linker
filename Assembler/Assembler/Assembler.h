@@ -3,10 +3,10 @@
 
 #include <iostream>
 #include <algorithm>
-#include "regex_rules.h"
-#include "Structures.h"
-#include "line_analyzer.h"
-#include "FileReader.h"
+#include "../Util/regex_rules.h"
+#include "../Util/Structures.h"
+#include "../Util/line_analyzer.h"
+#include "../Util/FileReader.h"
 
 class Assembler
 {

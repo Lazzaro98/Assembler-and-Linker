@@ -15,54 +15,54 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\assembler_main.cpp">
+    <ClCompile Include="Assembler\assembler_main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\FileReader.cpp">
+    <ClCompile Include="Util\FileReader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\line_analyzer.cpp">
+    <ClCompile Include="Util\line_analyzer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\regex_rules.cpp">
+    <ClCompile Include="Util\regex_rules.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Assembler.cpp">
+    <ClCompile Include="Assembler\Assembler.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Linker.cpp">
+    <ClCompile Include="Linker\Linker.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\File.cpp">
+    <ClCompile Include="Util\File.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\linker_main.cpp">
+    <ClCompile Include="Linker\linker_main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="inc\Assembler.h">
+    <ClInclude Include="Assembler\Assembler.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="inc\File.h">
+    <ClInclude Include="Util\File.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="inc\FileReader.h">
+    <ClInclude Include="Util\FileReader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="inc\line_analyzer.h">
+    <ClInclude Include="Util\line_analyzer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="inc\Linker.h">
+    <ClInclude Include="Linker\Linker.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="inc\regex_rules.h">
+    <ClInclude Include="Util\regex_rules.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="inc\Structures.h">
+    <ClInclude Include="Util\Structures.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="inc\Variadic_table.h">
+    <ClInclude Include="Util\Variadic_table.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

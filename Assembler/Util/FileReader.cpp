@@ -1,4 +1,4 @@
-#include "../inc/FileReader.h"
+#include "../Util/FileReader.h"
 #include <iostream>
 FileReader::FileReader(std::string filename)
 {
